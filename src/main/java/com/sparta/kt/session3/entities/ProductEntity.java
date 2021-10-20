@@ -4,8 +4,6 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Table(name = "products", indexes = {
-        @Index(name = "CategoryID", columnList = "CategoryID"),
-        @Index(name = "SupplierID", columnList = "SupplierID"),
         @Index(name = "ProductName", columnList = "ProductName")
 })
 @Entity
@@ -18,16 +16,18 @@ public class ProductEntity {
     @Column(name = "ProductName", nullable = false, length = 40)
     private String productName;
 
-    @Column(name = "SupplierID")
-    private Integer supplierID;
+    @ManyToOne
+    @JoinColumn(name = "SupplierID")
+    private SupplierEntity supplierID;
 
-    @Column(name = "CategoryID")
-    private Integer categoryID;
+    @ManyToOne
+    @JoinColumn(name = "CategoryID")
+    private CategoryEntity categoryID;
 
     @Column(name = "QuantityPerUnit", length = 20)
     private String quantityPerUnit;
 
-    @Column(name = "UnitPrice", precision = 19, scale = 4)
+    @Column(name = "UnitPrice", precision = 10, scale = 4)
     private BigDecimal unitPrice;
 
     @Column(name = "UnitsInStock")
@@ -39,8 +39,8 @@ public class ProductEntity {
     @Column(name = "ReorderLevel")
     private Integer reorderLevel;
 
-    @Column(name = "Discontinued")
-    private Boolean discontinued;
+    @Column(name = "Discontinued", nullable = false)
+    private Boolean discontinued = false;
 
     public Boolean getDiscontinued() {
         return discontinued;
@@ -90,19 +90,19 @@ public class ProductEntity {
         this.quantityPerUnit = quantityPerUnit;
     }
 
-    public Integer getCategoryID() {
+    public CategoryEntity getCategoryID() {
         return categoryID;
     }
 
-    public void setCategoryID(Integer categoryID) {
+    public void setCategoryID(CategoryEntity categoryID) {
         this.categoryID = categoryID;
     }
 
-    public Integer getSupplierID() {
+    public SupplierEntity getSupplierID() {
         return supplierID;
     }
 
-    public void setSupplierID(Integer supplierID) {
+    public void setSupplierID(SupplierEntity supplierID) {
         this.supplierID = supplierID;
     }
 

@@ -44,28 +44,6 @@ public class CustomerEntity {
     @Column(name = "Fax", length = 24)
     private String fax;
 
-    @Column(name = "Image")
-    private byte[] image;
-
-    @Column(name = "ImageThumbnail")
-    private byte[] imageThumbnail;
-
-    public byte[] getImageThumbnail() {
-        return imageThumbnail;
-    }
-
-    public void setImageThumbnail(byte[] imageThumbnail) {
-        this.imageThumbnail = imageThumbnail;
-    }
-
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
     public String getFax() {
         return fax;
     }
