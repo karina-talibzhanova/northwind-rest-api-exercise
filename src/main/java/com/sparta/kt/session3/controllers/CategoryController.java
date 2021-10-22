@@ -1,8 +1,11 @@
 package com.sparta.kt.session3.controllers;
 
 import com.sparta.kt.session3.dtos.CategoryDTO;
+import com.sparta.kt.session3.dtos.CategoryProductDTO;
 import com.sparta.kt.session3.entities.CategoryEntity;
+import com.sparta.kt.session3.entities.ProductEntity;
 import com.sparta.kt.session3.repositories.CategoryRepository;
+import com.sparta.kt.session3.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,10 +19,12 @@ import java.util.Optional;
 @RestController
 public class CategoryController {
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
-    public CategoryController(CategoryRepository categoryRepository) {
+    public CategoryController(CategoryRepository categoryRepository, ProductRepository productRepository) {
         this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
     }
 
     @GetMapping("/categories")
@@ -50,6 +55,20 @@ public class CategoryController {
         }
 
         return categoryDTO;
+    }
+
+    @GetMapping("/categories/{name}/products")
+    @ResponseBody
+    public List<CategoryProductDTO> getAllProductsInCategory(@PathVariable String name) {
+        List<CategoryProductDTO> categoryProductDTOs = new ArrayList<>();
+
+        for (ProductEntity productEntity : productRepository.findAll()) {
+            if (productEntity.getCategoryID().getCategoryName().equalsIgnoreCase(name)) {
+                categoryProductDTOs.add(new CategoryProductDTO(productEntity));
+            }
+        }
+
+        return categoryProductDTOs;
     }
 
 }
