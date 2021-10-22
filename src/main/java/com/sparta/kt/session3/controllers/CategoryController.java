@@ -40,21 +40,16 @@ public class CategoryController {
     @GetMapping("/categories/{name}")
     @ResponseBody
     public Optional<CategoryDTO> getCategoryByName(@PathVariable String name) {
-        Optional<CategoryEntity> category = Optional.empty();
-        Optional<CategoryDTO> categoryDTO = Optional.empty();
+        Optional<CategoryDTO> category = Optional.empty();
 
         for (CategoryEntity categoryEntity : categoryRepository.findAll()) {
             if (categoryEntity.getCategoryName().equalsIgnoreCase(name)) {
-                category = Optional.of(categoryEntity);
+                category = Optional.of(new CategoryDTO(categoryEntity));
                 break;
             }
         }
 
-        if (category.isPresent()) {
-            categoryDTO = Optional.of(new CategoryDTO(category.get()));
-        }
-
-        return categoryDTO;
+        return category;
     }
 
     @GetMapping("/categories/{name}/products")
