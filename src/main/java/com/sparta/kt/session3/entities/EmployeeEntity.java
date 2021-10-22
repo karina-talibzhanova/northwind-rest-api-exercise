@@ -2,6 +2,7 @@ package com.sparta.kt.session3.entities;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Table(name = "employees", indexes = {
         @Index(name = "PostalCode", columnList = "PostalCode"),
@@ -27,10 +28,10 @@ public class EmployeeEntity {
     private String titleOfCourtesy;
 
     @Column(name = "BirthDate")
-    private Instant birthDate;
+    private LocalDate birthDate;
 
     @Column(name = "HireDate")
-    private Instant hireDate;
+    private LocalDate hireDate;
 
     @Column(name = "Address", length = 60)
     private String address;
@@ -166,19 +167,19 @@ public class EmployeeEntity {
         this.address = address;
     }
 
-    public Instant getHireDate() {
+    public LocalDate getHireDate() {
         return hireDate;
     }
 
-    public void setHireDate(Instant hireDate) {
+    public void setHireDate(LocalDate hireDate) {
         this.hireDate = hireDate;
     }
 
-    public Instant getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Instant birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
