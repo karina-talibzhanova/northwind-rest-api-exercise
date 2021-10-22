@@ -14,8 +14,7 @@ public class EmployeeDTO {
     private String region;
     private String country;
     private String notes;
-    private EmployeeDTO reportsTo;
-    private Double salary;
+    private String reportsTo;
 
     public EmployeeDTO(EmployeeEntity employeeEntity) {
         lastName = employeeEntity.getLastName();
@@ -27,8 +26,7 @@ public class EmployeeDTO {
         region = employeeEntity.getRegion();
         country = employeeEntity.getCountry();
         notes = employeeEntity.getNotes();
-        reportsTo = employeeEntity.getReportsTo() == null ? null : new EmployeeDTO(employeeEntity.getReportsTo());
-        salary = employeeEntity.getSalary();
+        reportsTo = employeeEntity.getReportsTo() == null ? null : employeeEntity.getReportsTo().getFirstName() + " " + employeeEntity.getReportsTo().getLastName();
     }
 
     public String getLastName() {
@@ -67,11 +65,8 @@ public class EmployeeDTO {
         return notes;
     }
 
-    public EmployeeDTO getReportsTo() {
+    public String getReportsTo() {
         return reportsTo;
     }
 
-    public Double getSalary() {
-        return salary;
-    }
 }
