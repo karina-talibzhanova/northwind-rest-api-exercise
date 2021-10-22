@@ -1,5 +1,6 @@
 package com.sparta.kt.session3.controllers;
 
+import com.sparta.kt.session3.dtos.CustomerDTO;
 import com.sparta.kt.session3.entities.CustomerEntity;
 import com.sparta.kt.session3.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class CustomerController {
@@ -23,15 +25,15 @@ public class CustomerController {
 
     @GetMapping("/customers")
     @ResponseBody
-    public List<CustomerEntity> getAllCustomers(@RequestParam(required = false) String name) {
-        if (name == null) {
-            return customerRepository.findAll();
+    public List<CustomerDTO> getAllCustomers(@RequestParam(required = false) String contactName) {
+        if (contactName == null) {
+            return customerRepository.findAll().stream().map(CustomerDTO::new).collect(Collectors.toList());
         }
 
-        List<CustomerEntity> foundCustomers = new ArrayList<>();
+        List<CustomerDTO> foundCustomers = new ArrayList<>();
         for (CustomerEntity customerEntity : customerRepository.findAll()) {
-            if (customerEntity.getContactName().contains(name)) {
-                foundCustomers.add(customerEntity);
+            if (customerEntity.getContactName().contains(contactName)) {
+                foundCustomers.add(new CustomerDTO(customerEntity));
             }
         }
         return foundCustomers;
@@ -50,12 +52,12 @@ public class CustomerController {
 
     @GetMapping(value="/customers/title", params = {"contactTitle"})
     @ResponseBody
-    public List<CustomerEntity> getAllCustomersByContactTitle(@RequestParam String contactTitle) {
-        List<CustomerEntity> foundCustomers = new ArrayList<>();
+    public List<CustomerDTO> getAllCustomersByContactTitle(@RequestParam String contactTitle) {
+        List<CustomerDTO> foundCustomers = new ArrayList<>();
 
         for (CustomerEntity customerEntity : customerRepository.findAll()) {
             if (customerEntity.getContactTitle().equalsIgnoreCase(contactTitle)) {
-                foundCustomers.add(customerEntity);
+                foundCustomers.add(new CustomerDTO(customerEntity));
             }
         }
 
@@ -64,28 +66,28 @@ public class CustomerController {
 
     @GetMapping("/customers/location")
     @ResponseBody
-    public List<CustomerEntity> getAllCustomersInSpecificLocation(@RequestParam(required = false) String region, @RequestParam(required = false) String country, @RequestParam(required = false) String city) {
+    public List<CustomerDTO> getAllCustomersInSpecificLocation(@RequestParam(required = false) String region, @RequestParam(required = false) String country, @RequestParam(required = false) String city) {
         if (region == null && country == null && city == null) {
             // something has gone wrong here, need to report an error
             return new ArrayList<>();
         }
-        List<CustomerEntity> foundCustomers = new ArrayList<>();
+        List<CustomerDTO> foundCustomers = new ArrayList<>();
 
         if (region != null) {
             for (CustomerEntity customerEntity : customerRepository.findAll()) {
                 if (customerEntity.getRegion()!=null && customerEntity.getRegion().equalsIgnoreCase(region)) {
-                    foundCustomers.add(customerEntity);
+                    foundCustomers.add(new CustomerDTO(customerEntity));
                 }
             }
         }
 
         if (country != null) {
             if (foundCustomers.size() > 0) {
-                foundCustomers.removeIf(customerEntity -> !customerEntity.getCountry().equalsIgnoreCase(country));
+                foundCustomers.removeIf(customerDTO -> !customerDTO.getCountry().equalsIgnoreCase(country));
             } else {
                 for (CustomerEntity customerEntity : customerRepository.findAll()) {
                     if (customerEntity.getCountry() != null && customerEntity.getCountry().equalsIgnoreCase(country)) {
-                        foundCustomers.add(customerEntity);
+                        foundCustomers.add(new CustomerDTO(customerEntity));
                     }
 
                 }
@@ -94,11 +96,11 @@ public class CustomerController {
 
         if (city != null) {
             if (foundCustomers.size() > 0) {
-                foundCustomers.removeIf(customerEntity -> !customerEntity.getCity().equalsIgnoreCase(city));
+                foundCustomers.removeIf(customerDTO -> !customerDTO.getCity().equalsIgnoreCase(city));
             } else {
                 for (CustomerEntity customerEntity : customerRepository.findAll()) {
                     if (customerEntity.getCity() != null && customerEntity.getCity().equalsIgnoreCase(city)) {
-                        foundCustomers.add(customerEntity);
+                        foundCustomers.add(new CustomerDTO(customerEntity));
                     }
                 }
             }
