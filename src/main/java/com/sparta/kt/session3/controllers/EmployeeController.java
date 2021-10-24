@@ -5,10 +5,12 @@ import com.sparta.kt.session3.dtos.EmployeeDTO;
 import com.sparta.kt.session3.entities.EmployeeEntity;
 import com.sparta.kt.session3.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -73,7 +75,7 @@ public class EmployeeController {
     public List<EmployeeDTO> getAllEmployeesInSpecificLocation(@RequestParam(required = false) String region, @RequestParam(required = false) String country, @RequestParam(required = false) String city) {
         if (region == null && country == null && city == null) {
             // something has gone wrong here, need to report an error
-            return new ArrayList<>();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Expected at least one parameter");
         }
         List<EmployeeDTO> foundEmployees = new ArrayList<>();
 
