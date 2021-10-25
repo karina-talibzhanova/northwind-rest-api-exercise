@@ -1,6 +1,5 @@
 package com.sparta.kt.session3.controllers;
 
-import com.sparta.kt.session3.dtos.CustomerDTO;
 import com.sparta.kt.session3.dtos.EmployeeDTO;
 import com.sparta.kt.session3.entities.EmployeeEntity;
 import com.sparta.kt.session3.repositories.EmployeeRepository;
@@ -119,7 +118,7 @@ public class EmployeeController {
     public List<EmployeeDTO> getAllEmployeesHiredBetweenDates(@RequestParam(required = false) String lowerBound, @RequestParam(required = false) String upperBound) {
         if (lowerBound == null && upperBound == null) {
             // something has gone wrong
-            return new ArrayList<>();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Expected at least one parameter");
         }
 
         List<EmployeeDTO> foundEmployees = new ArrayList<>();
